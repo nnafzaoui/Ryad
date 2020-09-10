@@ -88,13 +88,16 @@ module.exports = function(app,passport) {
     app.get('/home', function(req,res) {
         res.render('index.ejs', {user: req.user, isLoggedIn: req.isAuthenticated()});
     });
-    app.get('/profile',isLoggedIn, function(req,res){
-        res.render('profile.ejs',{user: req.user, isLoggedIn: req.isAuthenticated()});
+    app.get('/profile',isLoggedIn, userReservation, function(req,res){
+        var reserv = reservation;
+        res.render('profile.ejs',{
+        user: req.user,
+        isLoggedIn: req.isAuthenticated(),
+        reserv: reserv
+        });
+        console.log(reservation);
     });
-    // app.get('/booking', function(req,res){
-    //     res.render('booking.ejs', {user: req.user, isLoggedIn: req.isAuthenticated()});
-    // });
-
+   
 
     // search by city
     app.get('/search',isLoggedIn, search, (req, res) => {
@@ -117,25 +120,55 @@ module.exports = function(app,passport) {
             user: req.user ,isLoggedIn: req.isAuthenticated(),
         } );
     });
-    app.post('/profile',reservation , urlencodedParser,  (req, res) => {
+    app.post('/profile',isLoggedIn,reservation, urlencodedParser, userReservation,  (req, res) => {
+        var reserv = reservation;
         var bookingInfo = req.body;
         var userName = req.user;
         res.render('profile',{
             user: req.user ,isLoggedIn: req.isAuthenticated(),
-            bookingInfo: bookingInfo
+            bookingInfo: bookingInfo,
+            reserv: reserv
         });
     })
-    app.post('/profile/upload',upload.single('img'),addRyad, (req, res) =>{
-        // if (!req.file) return res.send('Please upload a file')
-        
+    app.get('/reservations',isLoggedIn,allreservations, (req, res)=>{
+        res.render('reservations',{
+            user: req.user ,isLoggedIn: req.isAuthenticated(),
+            allreserve
+        });
     })
-    app.get('/Admin' , (req, res) =>{
+    app.post('/reservations/delete', deleteReservation, (req, res) =>{
+       console.log("called")
+    });
+    app.post('/Admin',upload.single('img'),addRyad, (req, res) =>{
         res.render('admin', {
-            user: req.user ,isLoggedIn: req.isAuthenticated()
+            user: req.user ,isLoggedIn: req.isAuthenticated(),
+        });
+        
+    });
+    app.get('/Admin', isLoggedIn, allRyads, (req, res) =>{
+        var all = allRyads;
+        res.render('admin', {
+            user: req.user ,isLoggedIn: req.isAuthenticated(),
+            all: all
         })
         
     })
-
+    app.get('/Admin/all',allRyads, (req, res) =>{
+        var all = allRyads;
+        res.send(all)
+    })
+    app.delete('/Admin/:id',deleteRyad, (req, res) => {
+        const { id } = req.params;
+        console.log(id);
+        
+      });
+    app.post('/Admin/update', updateRyad,(req, res) =>{
+        var values =  req.body;
+        console.log(values);
+    });
+    app.get('*', function(req, res) {
+        res.redirect('/');
+    });
 };
 
 
@@ -181,40 +214,124 @@ function selectedRyad(req, res, next){
     });
 }
 
-function reservation(req, res, next) {
+function reservation(req,res, next) {
     var reservedRyad = req.body;
-    var query = "INSERT INTO reservation (ryadid, id, Susername, Semail, Sryadname, Sryadcity, Srooms, Sryadaddress, Sprice) values (?,?,?,?,?,?,?,?,?)";
-    connection.query(query,[reservedRyad.Sryadid, reservedRyad.Suserid, reservedRyad.Susername, reservedRyad.Semail, reservedRyad.Sryadname, reservedRyad.Sryadcity, reservedRyad.Srooms , reservedRyad.Sryadaddress, reservedRyad.Sprice ], (err, result) => {
+  
+    var query = "INSERT INTO reservation (ryadid, id, Susername, Semail, Sryadname, Sryadcity, Srooms, Sryadaddress, Sprice, img) values (?,?,?,?,?,?,?,?,?,?)";
+    var selectquery = "SELECT rooms FROM ryads where ryadid =" + reservedRyad.Sryadid;
+    connection.query(query,[reservedRyad.Sryadid, reservedRyad.Suserid, reservedRyad.Susername, reservedRyad.Semail, reservedRyad.Sryadname, reservedRyad.Sryadcity, reservedRyad.Srooms , reservedRyad.Sryadaddress, reservedRyad.Sprice, reservedRyad.img ], (err, result) => {
         if (err){
             console.log(err)
         }
         next();
     });
+    var rooms = "";
+    
+    connection.query(selectquery, (err, result)=>{
+        if(err){
+            console.log(err);
+        }
+        rooms = result;
+        var updatedrooms = rooms[0].rooms - reservedRyad.Srooms;
+        var updatequery = "UPDATE ryads SET rooms = "+ updatedrooms +" WHERE ryadid ="+reservedRyad.Sryadid;
+        connection.query(updatequery, (err, result)=>{
+        if(err){
+        console.log(err);
+        }
+        var deletebyrooms = "DELETE FROM ryads where rooms < 1";
+        connection.query(deletebyrooms, (err,result)=>{
+            if(err){
+                console.log(err);
+            }
+             return result;
+        })
+      
+    })
+    });    
 }
+function allreservations(req, res, next){
+    var query = "SELECT * FROM reservation";
+    connection.query(query, (err,result)=>{
+        if(err){
+            console.log(err);
+            next();
+        }
+        allreserve = result;
+        next();
+    })
+}
+
 
 function addRyad(req, res, next) {
     var ryadData = req.body;
+ 
     var ryadImg = normalize(req.file.path);
     var query = "INSERT INTO ryads (name, city, price, rooms, address, img) values (?,?,?,?,?,?)"
     if (ryadData != null || ryadImg != null) {
         connection.query(query, [ryadData.name, ryadData.city, ryadData.price, ryadData.rooms, ryadData.address, ryadImg], (err, result)=>{
             if (err){
                 console.log(err)
+                next();
             }
             next();
         })
     }
 }
 
-function allRyads(req, res,) {
+function allRyads(req, res, next) {
     var query = "SELECT * FROM ryads"
+    
     connection.query(query, (err, result) => {
         if(err){
+           allRyads = "",
             console.log(err)
+            next();
         }
-        req.allRyads = result;
-        next()
+        allRyads = result;
+  
+       next();
     })
-    console.log(result)
-
 }
+function deleteRyad(req,res,next) {
+    const { id } = req.params;
+    var query = "DELETE FROM ryads WHERE ryadid = " + id;
+    connection.query(query, (err, result)=>{
+        if(err){
+            console.log(err);
+        }
+        next();
+    })
+}
+function deleteReservation (req, res, next){
+    var id = req.body.id;
+    var query = "DELETE FROM reservation WHERE reservationid =" + id;
+    connection.query(query, (err, result)=>{
+        if(err){
+            console.log(err);
+        }
+        next();
+    })
+}
+function userReservation (req, res, next){
+    var user = req.user;
+    var query = "SELECT * FROM reservation WHERE Susername = '" + user.name +"'";
+    connection.query(query, (err, result)=>{
+        if(err){
+            console.log(err);
+        }
+        reservation = result;
+        console.log(reservation)
+        next();
+    })
+}
+function updateRyad (req, res, next) {
+    var Edited = req.body;
+    var query = "UPDATE ryads SET name = '"+ Edited.name+"', city = '" + Edited.city +"', price ='" + Edited.price +"', rooms ='" + Edited.rooms +"', address = '" + Edited.address + "' WHERE ryadid = "+ Edited.id;
+    connection.query(query, (err, result)=>{
+        if (err){
+            console.log(err);
+        }
+        next();
+    })
+}
+

@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../public/css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&family=Roboto+Condensed&family=Sora&display=swap" rel="stylesheet">
+    <link rel="icon" href="public/img/favicon-96x96.png">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     
@@ -15,10 +16,10 @@
   <body>
     <%- include ("./partials/navbar.ejs") %>
       <main>
-          <section> <!-- Admin Section  -->
-           
+          <section class="AddRyadSection"> <!-- Admin Section  -->
+           <h3 style="text-align: center;color: white; margin-top: 40px;">You can add new available Ryads below</h3>
             <div class="booking-form">
-            <form action="/profile/upload" method="POST" enctype="multipart/form-data">
+            <form action="/Admin" name="addryad" method="POST" enctype="multipart/form-data">
                 <div  class="row">
                 <div  class="col-sm-6">
                     <div class="form-group">
@@ -43,7 +44,7 @@
                         <div  class="col-sm-6">
                             <div  class="form-group">
                                 <span  class="form-label">Available Rooms</span>
-                                <input class="form-control" ryadRooms name="rooms" type="number" >
+                                <input class="form-control" id="ryadRooms" name="rooms" type="number" >
                             </div>
                         </div>
                     </div>
@@ -62,72 +63,46 @@
                   </div>
                 </div>
 
-                <div>
+                <div class="row">
+                <div class="col-sm-6">
                 <div class="form-btn">
                   <button type="submit" class="submit-btn">Add Ryad</button>
+                </div>
+                </div>
+                <div class="col-sm-6">
+                <div class="form-group">
+                    <button onclick="showTable()" class="submit-btn" id="allryads" type="button">Get the list of all ryads</button>
+                </div>
+                
                 </div>
             </div>
             </form>
            </section>
-            <!-- <div class="Admin">
-            <div class="adminForm">
-                <div class="row">
-                  <form action="/profile/upload" method="POST" class="col s12"  enctype="multipart/form-data">
-                    <div class="row">
-                      <div class="input-field col s6">
-                        <input name="name" type="text">
-                        <label >Ryad Name</label>
-                      </div>
-                      <div class="input-field col s6">
-                        <input name="city" type="text" >
-                        <label>Ryad City</label>
-                      </div>
-                    </div>
-                    
-                    <div class="row">
-                      <div class="input-field col s6">
-                        <input name="price" type="number">
-                        <label>The Price in MAD</label>
-                      </div>
-                    
-                      <div class="input-field col s6">
-                        <input name="rooms" type="number" >
-                        <label>Available Rooms</label>
-                      </div>
-                    </div>
-                    
-                    <div class="row">
-                      <div class="input-field col s12">
-                        <input name="address" type="text" >
-                        <label >The Address</label>
-                      </div>
-                      <div class="file-field input-field">
-                        <div class="btn">
-                          <span>File</span>
-                          <input accept="image/*" name="img"  type="file">
-                        </div>
-                        <div class="file-path-wrapper">
-                          <input class="file-path validate" type="text">
-                        </div>
-                      </div>
-                      <div col s12>
-                      <button  type="submit">Submit
-                       
-                      </button>
-                    </div>
-                      </div>
-                      
-                    
-                  </form>
-                </div>
-                </div>
-              </div>
-              </div>
-            
-   
-          </section> -->
-       
+           
       </main>
+      <section style="display: none;" id="tablesection">
+        <h3 style="text-align: center;color: white; margin-top: 40px;">These are the current available Ryads</h3>
+        <div style="text-align: center; color: white;">
+          <p>You can update a ryad by clicking the update button and selecting the row <br></p>
+          <p>After Editing hit enter and the changes will be saved</p>
+        </div>
+         <table  id="miyazaki">
+            <thead>
+            <tr>
+            <th style="display:none;">ID</th>
+              <th>Ryad Name</th>
+              <th>City</th>
+              <th>Rooms</th>
+              <th>At</th>
+              <th>Price</th>
+              <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="target">
+            </tbody>
+        </table>
+    
+      </section> 
       <footer class="footer">
         <div>
           <div class="logorights">
@@ -155,23 +130,11 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://kit.fontawesome.com/21917d46d7.js" crossorigin="anonymous"></script>
     <script src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
-    <script>
-        $(document).ready(function(){
-    $("form#changeQuote").on('submit', function(e){
-        e.preventDefault();
-        var data = $('input[name=quote]').val();
-        $.ajax({
-            type: 'post',
-            url: '/ajax',
-            data: data,
-            dataType: 'text'
-        })
-        .done(function(data){
-            $('h1').html(data.quote);
-        });
-    });
-});
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.min.js"></script>
+    <script src="public/script/table-edits.min.js"></script>
+    <script src="public/script/adminTools.js"></script>
+    <script src="public/script/showHide.js"></script>
   </body>
 </html>

@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../public/css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&family=Roboto+Condensed&family=Sora&display=swap" rel="stylesheet">
+    <link rel="icon" href="public/img/favicon-96x96.png">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     
@@ -18,7 +19,17 @@
         <section class="sectionBackground">
         <section class="sectionForm" >
           <div class="formHeading">
-            <h2>Find Hotels and Ryad offers now</h2>
+            <h2>Look for ryads in your city </h2>
+            <p>Search by your prefered city and book your room</p>
+            <% if(isLoggedIn){%>
+            <div>
+              <p>Welcome <%=user.name%></p>
+            </div>
+            <%} else {%>
+              <div>
+                <p>But You'll have to Sign-up/Login first</p>
+              </div>
+              <%}%>
             </div>
         <div class="formDiv">
         <form id="form"  name="myForm"  onsubmit="return validateForm()" action="/search" method="GET" >
@@ -40,7 +51,7 @@
   </section>
           <section class="container" id="slider">
               <!-- Slider -->
-              <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+              <div style="height: 500px;" id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                   <div class="carousel-item active">
                     <img class="d-block w-100" src="../public/img/slide1.jpg" alt="First slide">
@@ -61,85 +72,16 @@
                   <span class="sr-only">Next</span>
                 </a>
               </div>
-          </section>
-         
-          <section class="galery">
-            <div class="container">
-            
-              <div class="row text-center text-lg-left">
-            
-                <div id="riadbox" class="col-lg-3 col-md-4 col-6">
-                  <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="../public/img/Image1.png" alt="">
-                        <p>Safi,Morocco</p>
-                        <p style=" line-height: 60%;">Ryad Asfi</p>
-                        <p id="pricetag">Price: MAD 500</p>
-                      </a>
-                      
-                </div>
-                <div id="riadbox" class="col-lg-3 col-md-4 col-6">
-                  <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="../public/img/image2.png" alt="">
-                        <p>Casablanca,Morocco</p>
-                        <p style=" line-height: 60%;">Dar lmdina</p>
-                        <p id="pricetag">Price: MAD 1000</p>
-                      </a>
-                </div>
-                <div id="riadbox" class="col-lg-3 col-md-4 col-6">
-                  <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="../public/img/Image3.png" alt="">
-                        <p>Marrakesh,Morocco</p>
-                        <p style=" line-height: 60%;">Caravanserai</p>
-                        <p id="pricetag">Price: MAD 624</p>
-                      </a>
-                </div>
-                <div id="riadbox" class="col-lg-3 col-md-4 col-6">
-                  <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="../public/img/Image4.png" alt="">
-                        <p>Fez,Morocco</p>
-                        <p style=" line-height: 60%;">Riad Elegancia</p>
-                        <p id="pricetag">Price: MAD 985</p>
-                      </a>
-                </div>
-                <div id="riadbox" class="col-lg-3 col-md-4 col-6">
-                  <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="../public/img/image5.png" alt="">
-                        <p>Casablanca,Morocco</p>
-                        <p style=" line-height: 60%;">MonRiad</p>
-                        <p id="pricetag">Price: MAD 691</p>
-                      </a>
-                </div>
-                <div id="riadbox" class="col-lg-3 col-md-4 col-6">
-                  <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="../public/img/image6.png" alt="">
-                        <p>Casablanca,Morocco</p>
-                        <p style=" line-height: 60%;">Dar lmdina</p>
-                        <p id="pricetag">Price: 1000 MAD</p>
-                      </a>
-                </div>
-                <div id="riadbox" class="col-lg-3 col-md-4 col-6">
-                  <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="../public/img/image7.png" alt="">
-                        <p>Casablanca,Morocco</p>
-                        <p style=" line-height: 60%;">Dar lmdina</p>
-                        <p id="pricetag">Price: 1000 MAD</p>
-                      </a>
-                </div>
-                <div id="riadbox" class="col-lg-3 col-md-4 col-6">
-                  <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="../public/img/image8.png" alt="">
-                        <p>Casablanca,Morocco</p>
-                        <p style=" line-height: 60%;">Dar lmdina</p>
-                        <p id="pricetag">Price: 1000 MAD</p>
-                      </a>
-                </div>
-              </div>
-            
-            </div>
-          </section>
-
-          
+          </section> 
       </main>
+      <section class="movingtext">
+        <div class="bio">
+          <p class="text-moving">Morocco is well known for it's beatuifull architecture.</p>
+        <p class="text-moving2">You can explore it's beauty by staying in a ryad...</p>
+        <p class="text-moving3">Feel free to search for Ryads from your favourite city above </p>
+        </div>
+      </section>
+      
       <footer class="footer">
         <div>
           <div class="logorights">
@@ -168,16 +110,9 @@
     <script type="text/javascript">
     
     </script>
+    <script src="https://kit.fontawesome.com/21917d46d7.js" crossorigin="anonymous"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="typeahead.min.js" type="text/javascript"></script>
-        <script>
-          function validateForm() {
-            var x = document.forms["myForm"]["search"].value;
-            if (x == "" || x == null) {
-             
-              return false;
-            }
-          }
-          </script>
+        <script src="../public/script/script.js"></script>
   </body>
 </html>

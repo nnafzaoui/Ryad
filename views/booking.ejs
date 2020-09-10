@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../public/css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&family=Roboto+Condensed&family=Sora&display=swap" rel="stylesheet">
+    <link rel="icon" href="public/img/favicon-96x96.png">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     
@@ -44,10 +45,18 @@
                         <div class="col-sm-8">
                           <div class="form-group">
                             <span class="form-label">Rooms</span>
+                           
                             <select class="form-control">
+                            <% if (selectedRiad[0].rooms == 1 ) {%>
+                              <option>1</option>
+                              <% } else if ( selectedRiad[0].rooms == 2){%>
+                              <option>1</option>
+                              <option>2</option>
+                              <% } else if ( selectedRiad[0].rooms >= 2){%>
                               <option>1</option>
                               <option>2</option>
                               <option>3</option>
+                              <% } %>
                             </select>
                             <span class="select-arrow"></span>
                           </div>
@@ -74,6 +83,7 @@
                         <input type="hidden" name="Srooms" value="1">
                         <input type="hidden" name="Sryadaddress" value="<%= selectedRiad[0].address %>">
                         <input type="hidden" value="<%= selectedRiad[0].price %>" name="Sprice">
+                        <input type="hidden" name="img" value="<%= selectedRiad[0].img %>">
                       </div>
                       <script>
 

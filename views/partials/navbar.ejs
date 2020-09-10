@@ -9,9 +9,7 @@
         <li class="nav-item active">
           <a class="nav-link" id="navcircles" href="/">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item active">
-          <a class="nav-link" id="navcircles" href="/booking">Booking</a>
-        </li>    
+        
       </ul>
      
       <ul id="nav2" class="navbar-nav mr-auto mt-4 mt-lg-0">
@@ -25,21 +23,24 @@
           <a id="navcircles" style="color: red;" class="nav-link" href="/logout">Logout</a>
         </li>
         <%} else {%>
-          <li style="text-align: center;" class="nav-item active">
-            <a style="color: #8FC1E2;" class="nav-link" href="/Admin">Admin tab</a>
+          <li style="text-align: center;" id="navB" class="nav-item active">
+            <a id="navcircles" class="nav-link" href="/reservations">Reservations</a>
+          </li>
+          <li style="text-align: center;" id="navB" class="nav-item active">
+            <a id="navcircles" class="nav-link" href="/Admin">Admin</a>
           </li>
           <li style="text-align: center;" class="nav-item active">
-            <a style="color: #8FC1E2;" class="nav-link" href="/profile">Welcome <%=user.name%></a>
+            <a style="color: white;" class="nav-link" href="/profile"><i class="fas fa-user-circle fa-2x"></i></a>
           </li>
           <li  class="nav-item active">
-            <a id="navcircles" style="color: red;" class="nav-link" href="/logout">Logout</a>
+            <a id="navcircles" style="color: red;" class="nav-link" href="/logout">Logout</i></a>
           </li>
         <%}%>
         <%} else {%>
-          <li  class="nav-item active">
+          <li id="navB" class="nav-item active">
               <a id="navcircles" class="nav-link" href="/login">Login</a>
             </li>
-          <li  class="nav-item active">
+          <li  id="navB" class="nav-item active">
               <a id="navcircles" class="nav-link" href="/signup">Sign-up</a>
             </li>
           
