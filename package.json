@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-mysql-login-and-signup",
+  "name": "Ryad",
   "version": "1.0.0",
-  "description": "none",
+  "description": "Fil rouge project for passing youcode's first year 2020",
   "main": "server.js",
   "scripts": {
     "test": "test",
